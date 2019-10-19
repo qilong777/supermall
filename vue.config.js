@@ -7,12 +7,14 @@ function resolve(dir) {
 module.exports = {
   //开发模式注释
   // publicPath: '/miaomiao',
-  // devServer: {
-  //   proxy: {
-
-  //   }
-  // },
-
+  devServer: {
+    proxy: {
+      '/api': {
+        target: "http://www.liulongbin.top:3005",
+        changeOrigin: true
+      }
+    }
+  },
   chainWebpack: (config) => {
     //set第一个参数：设置的别名，第二个参数：设置的路径
     config.resolve.alias

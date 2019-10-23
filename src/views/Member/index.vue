@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: "Member"
+  name: "Member",
+  activated() {
+    this.$store.commit("CHANGETITLE", "会员");
+  }
 };
 </script>
 

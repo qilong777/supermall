@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeRouter from './home.js'
-import MemberRouter from './member.js'
+import HomeRouter from './home'
+import NewsListRouter from './newsList'
+import NewsInfoRouter from './newsInfo'
+import MemberRouter from './member'
 import ShopCarRouter from './shopcar'
-import SearchRouter from './search.js'
+import SearchRouter from './search'
 Vue.use(VueRouter)
 
 const routes = [
@@ -14,7 +16,9 @@ const routes = [
   HomeRouter,
   MemberRouter,
   ShopCarRouter,
-  SearchRouter
+  SearchRouter,
+  NewsListRouter,
+  NewsInfoRouter
 ]
 
 const router = new VueRouter({

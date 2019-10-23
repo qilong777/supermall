@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <mt-header fixed title="首页"></mt-header>
-    <transition>
-      <keep-alive>
+    <mt-header fixed :title="title"></mt-header>
+    <main>
+      <transition>
         <router-view></router-view>
-      </keep-alive>
-    </transition>
+      </transition>
+    </main>
 
     <nav class="mui-bar mui-bar-tab">
       <router-link class="mui-tab-item" to="/home">
@@ -35,19 +35,35 @@ export default {
   name: "App",
   data() {
     return {};
+  },
+  computed: {
+    title() {
+      return this.$store.state.title;
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
 #app {
+  display: flex;
   height: 100%;
-  padding-top: 45px;
-  padding-bottom: 50px;
+  flex-direction: column;
+  // padding-top: 45px;
+  // padding-bottom: 50px;
   overflow-x: hidden;
+
   .mint-header {
+    position: relative;
     height: 45px;
+    flex-shrink: 0;
+  }
+  main {
+    flex: 1;
+    overflow: auto;
   }
   .mui-bar {
+    position: relative;
+    flex-shrink: 0;
     box-shadow: 0 -1px 5px -3px rgb(100, 100, 100); /*no*/
   }
 }

@@ -29,18 +29,18 @@ export default {
 
   methods: {
     getNewsList(callback) {
+      this.$indicator.open({
+        text: "加载中...",
+        spinnerType: "fading-circle"
+      });
       this.axios({
         method: "get",
         url: "/api/getnewslist"
       }).then(res => {
         const data = res.data;
+        this.$indicator.close();
         if (data.status === 0) {
           this.newsList = data.message;
-          this.$toast({
-            message: "加载成功",
-            position: "top",
-            duration: 500
-          });
           this.$refs.loadmore.onTopLoaded();
         } else {
           this.$toast("加载失败");
@@ -53,12 +53,8 @@ export default {
     loadBottom() {}
   },
   created() {
+    this.$store.commit("CHANGETITLE", "新闻列表");
     this.getNewsList();
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$store.commit("CHANGETITLE", "新闻列表");
-    });
   }
 };
 </script>

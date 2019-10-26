@@ -2,8 +2,8 @@
   <div class="comment">
     <h3>发表评论</h3>
     <hr />
-    <textarea placeholder="请输入要评论的内容（做多150字）" maxlength="150"></textarea>
-    <mt-button type="primary" size="large">发表评论</mt-button>
+    <textarea v-model="myComment" placeholder="请输入要评论的内容（做多150字）" maxlength="150"></textarea>
+    <mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
     <ul class="cmt-list">
       <li class="cmt-item" v-for="(item,index) in comments" :key="item.add_time">
         <h4 class="cmt-title">
@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       pageIndex: 1,
-      comments: []
+      comments: [],
+      myComment: ""
     };
   },
   props: ["id"],
@@ -45,6 +46,38 @@ export default {
       return content === "undefined" || content == ""
         ? "此用户未发表评论内容"
         : content;
+    },
+    postComment() {
+      const content = this.myComment.trim();
+      if (content === "") {
+        this.$toast("评论不能为空!");
+        return;
+      }
+      this.$indicator.open({
+        text: "发表中...",
+        spinnerType: "fading-circle"
+      });
+      this.axios({
+        method: "post",
+        url: `/api/postComment/${this.id}`,
+        data: {
+          content
+        }
+      }).then(res => {
+        const data = res.data;
+        this.$indicator.close();
+        if (data.status === 0) {
+          let cmt = {
+            user_name: "匿名用户",
+            add_time: Date.now(),
+            content
+          };
+          this.comments.unshift(cmt);
+          this.myComment = "";
+        } else {
+          this.$toast("发表评论失败");
+        }
+      });
     }
   },
   created() {

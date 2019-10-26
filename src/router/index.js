@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeRouter from './home'
-import NewsListRouter from './newsList'
-import NewsInfoRouter from './newsInfo'
+import HomeRouter from './Home/home'
+import NewsListRouter from './Home/newsList'
+import NewsInfoRouter from './Home/newsInfo'
+import PhotoListRouter from './Home/photoList'
+import PhotoInfoRouter from './Home/photoInfo'
+import GoodsList from './Home/goodsList'
+import GoodsInfo from './Home/goodsInfo'
+import GoodsDesc from './Home/goodsDesc'
+import GoodsComment from './Home/goodsComment'
 import MemberRouter from './member'
 import ShopCarRouter from './shopcar'
 import SearchRouter from './search'
@@ -18,7 +24,13 @@ const routes = [
   ShopCarRouter,
   SearchRouter,
   NewsListRouter,
-  NewsInfoRouter
+  NewsInfoRouter,
+  PhotoListRouter,
+  PhotoInfoRouter,
+  GoodsList,
+  GoodsInfo,
+  GoodsDesc,
+  GoodsComment
 ]
 
 const router = new VueRouter({

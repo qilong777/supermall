@@ -10,6 +10,7 @@ module.exports = {
         "style": true
       }
     ]
-  ]
+  ],
+  ignore: ["./src/assets/js/mui.min.js"]
 }
 

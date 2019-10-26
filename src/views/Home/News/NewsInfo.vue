@@ -30,11 +30,16 @@ export default {
   },
   methods: {
     getNewsInfo() {
+      this.$indicator.open({
+        text: "加载中...",
+        spinnerType: "fading-circle"
+      });
       this.axios({
         method: "get",
         url: "/api/getnew/" + this.id
       }).then(res => {
         const data = res.data;
+        this.$indicator.close();
         if (data.status === 0) {
           this.newsInfo = data.message[0];
         } else {
@@ -43,12 +48,8 @@ export default {
       });
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.$store.commit("CHANGETITLE", "新闻详情");
-    });
-  },
   created() {
+    this.$store.commit("CHANGETITLE", "新闻详情");
     this.getNewsInfo();
   },
   components: {

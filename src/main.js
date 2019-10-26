@@ -8,15 +8,18 @@ import './assets/css/mui.min.css';
 import './assets/css/icons-extra.css';
 import moment from 'moment'
 import axios from 'axios'
-import { Header, Swipe, SwipeItem, Toast, Loadmore, Button } from 'mint-ui';
-Vue.component(Button.name, Button);
-Vue.component(Loadmore.name, Loadmore);
-Vue.component(Swipe.name, Swipe);
-Vue.component(SwipeItem.name, SwipeItem);
-Vue.component(Header.name, Header);
+import 'mint-ui/lib/style.css'
+import MintUI from 'mint-ui'
+import VuePreview from 'vue-preview'
+//图片预览
+Vue.use(VuePreview);
+Vue.use(MintUI);
 
-Vue.prototype.$toast = Toast;
 axios.defaults.timeout = 5000;
+router.beforeEach((to, from, next) => {
+  store.commit("CHANGELENGTH", 1);
+  next()
+});
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false
 //格式化时间

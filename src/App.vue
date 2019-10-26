@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <mt-header fixed :title="title">
-      <a slot="left" v-if="isShow">
+      <a slot="left" v-show="isShow">
         <mt-button icon="back" @click="goBack()">返回</mt-button>
       </a>
     </mt-header>
@@ -39,22 +39,37 @@ export default {
   name: "App",
   data() {
     return {
-      carCount: 0
+      isShow: false
     };
   },
   computed: {
     title() {
       return this.$store.state.title;
     },
-    isShow() {
-      return this.$store.state.historyLength > 1;
+    carCount() {
+      let count = 0;
+      this.$store.state.shopCar.forEach(ele => {
+        count += ele[ele.id];
+      });
+      return count;
     }
   },
   methods: {
     goBack() {
-      this.$store.commit("CHANGELENGTH", -2);
       this.$router.back();
     }
+  },
+  watch: {
+    "$route.path": function(newVal) {
+      if (newVal == "/home") {
+        this.isShow = false;
+      } else {
+        this.isShow = true;
+      }
+    }
+  },
+  created() {
+    this.isShow = this.$route.path === "/home" ? false : true;
   }
 };
 </script>

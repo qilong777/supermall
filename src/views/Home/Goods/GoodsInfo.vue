@@ -60,9 +60,17 @@
     </div>
 
     <!-- 购物车小球 -->
-    <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
-      <div class="ball" v-show="ballShow" ref="ball"></div>
-    </transition>
+    <div>
+      <transition
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter"
+        v-for="(item,index) in balls"
+        :key="index"
+      >
+        <div class="ball" v-show="item.show"></div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -76,7 +84,30 @@ export default {
       id: this.$route.params.id,
       imageList: [],
       goodsInfo: {},
-      ballShow: false,
+      balls: [
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false },
+        { show: false }
+      ],
+      dropBall: [], //已经在下降的小球存在这里
       selectedCount: 1
     };
   },
@@ -115,8 +146,14 @@ export default {
       this.$router.push(`/home/goodsComment/${this.id}`);
     },
     addToShopCar() {
-      this.ballShow = true;
-      this.selectedCount = this.$refs.count.value;
+      for (let i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i];
+        if (!ball.show) {
+          ball.show = true;
+          this.dropBall.push(ball);
+          return;
+        }
+      }
     },
     //小球动画
     beforeEnter(el) {
@@ -127,20 +164,40 @@ export default {
     },
     enter(el, done) {
       el.offsetWidth;
-      const ballPosition = this.$refs.ball.getBoundingClientRect();
+      const countPosition = this.$refs.count.getBoundingClientRect();
       const badgePosition = document
         .getElementById("badge")
         .getBoundingClientRect();
 
-      let x = badgePosition.x - ballPosition.x + "px";
-      let y = badgePosition.y - ballPosition.y + "px";
+      let x = badgePosition.x - countPosition.x + "px";
+      let y = badgePosition.y - countPosition.y + "px";
 
       el.style.transform = `translate(${x}, ${y})`;
       el.style.transition = "all 1s cubic-bezier(.37,-0.72,.32,.63)";
-      done();
+      el.addEventListener("transitionend", done);
     },
     afterEnter(el) {
-      this.ballShow = false;
+      let ball = this.dropBall.shift();
+      if (ball) {
+        ball.show = false;
+        el.style.display = "none"; //这个很重要
+      }
+      let nowShopCar = this.$store.state.shopCar.find(ele => ele.id == this.id);
+      console.log(nowShopCar);
+
+      const nowCount = nowShopCar ? nowShopCar.count : 0;
+      const addCount = parseInt(this.$refs.count.value);
+      if (nowCount + addCount > this.goodsInfo.stock_quantity) {
+        this.$toast("购物数量已达上限");
+        return;
+      }
+      let goodsInfo = {
+        id: this.id,
+        price: this.goodsInfo.sell_price,
+        selected: true
+      };
+      goodsInfo[goodsInfo.id] = addCount;
+      this.$store.commit("ADDTOSHOPCAR", goodsInfo);
     }
   },
 
@@ -203,6 +260,8 @@ export default {
   .ball {
     position: absolute;
     z-index: 100;
+    top: 100px;
+    left: 100px;
     width: 15px;
     height: 15px;
     border-radius: 50%;

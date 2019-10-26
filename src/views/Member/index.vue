@@ -5,7 +5,7 @@
 <script>
 export default {
   name: "Member",
-  activated() {
+  created() {
     this.$store.commit("CHANGETITLE", "会员");
   }
 };
